@@ -4,14 +4,14 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
 import User from '~/database/models/user';
-import { assertValidCredentials, assertValidAccount } from '~/routes/permissions/auth';
+import { assertValidCredentials } from '~/routes/permissions/auth';
 import commonConstants from '~/constants/common';
 import messageConstants from '~/constants/message';
 import utils from '~/utils';
 
 exports.register = async (req, res) => {
   try {
-    const { email, userName, password } = req.body;
+    const { email, firstName, lastName, password } = req.body;
 
     let user = await User.findOne({ email: { $regex: new RegExp('^' + email.toLowerCase() + '$', 'i') } });
     if (!utils.isEmpty(user)) {
@@ -23,7 +23,8 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, commonConstants.BYCRYPT_LENGTH);
     user = new User({
       email,
-      userName,
+      firstName,
+      lastName,
       password: hashedPassword
     });
     user = await user.save();
@@ -50,8 +51,11 @@ exports.login = async (req, res) => {
       });
     }
 
-    assertValidAccount(user);
-    assertValidCredentials(password, user.password);
+    if (!assertValidCredentials(password, user.password)) {
+      return res.status(404).json({
+        message: messageConstants.AUTH_INVALID_CREDENTIAL
+      });;
+    }
     user.lastLoginAt = new Date();
     user.save();
 
@@ -84,7 +88,6 @@ exports.forgotPassword = async (req, res) => {
       });
     }
 
-    assertValidAccount(user);
     const token = crypto.randomBytes(20).toString('hex');
     user.resetPasswordToken = token;
     user.resetPasswordExpires = Date.now() + commonConstants.EXPIRE_FORGOT_PASSWORD_EMAIL;
@@ -122,6 +125,19 @@ exports.resetPassword = async (req, res) => {
     return res.status(200).json({ message: messageConstants.AUTH_PASSWORD_UPDATED });
   } catch (error) {
     console.log('[routes AuthAPI forgotPassword] error => ', error);
+    return res.status(500).json({
+      message: messageConstants.SOMETHING_WENT_WRONG
+    });
+  }
+}
+
+exports.getCurrentUser = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const user = await User.findById(_id);
+    return res.status(200).send(user);
+  } catch (error) {
+    console.log('[routes AuthAPI getCurrentUser] error => ', error);
     return res.status(500).json({
       message: messageConstants.SOMETHING_WENT_WRONG
     });

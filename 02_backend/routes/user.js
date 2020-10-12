@@ -2,7 +2,6 @@
 import bcrypt from 'bcrypt';
 
 import User from '~/database/models/user';
-import { assertEditUserValidation } from '~/routes/permissions/user';
 import commonConstants from '~/constants/common';
 import messageConstants from '~/constants/message';
 import utils from '~/utils';
@@ -36,7 +35,6 @@ exports.addUser = async (req, res) => {
   try {
     let user = req.body;
     let currentUser = {};
-    assertEditUserValidation(req.user);
 
     if (!!user.email) {
       currentUser = await User.findOne({ email: { $regex: new RegExp('^' + user.email.toLowerCase() + '$', 'i') } });
@@ -69,7 +67,6 @@ exports.editUser = async (req, res) => {
   try {
     let user = req.body;
     let currentUser = {};
-    assertEditUserValidation(req.user, user._id);
 
     if (!!user.email) {
       currentUser = await User.findOne({ email: { $regex: new RegExp('^' + user.email.toLowerCase() + '$', 'i') } });
@@ -101,7 +98,6 @@ exports.editUser = async (req, res) => {
 exports.removeUser = async (req, res) => {
   try {
     const _id = req.query._id;
-    assertEditUserValidation(req.user, _id);
 
     const user = await User.findOneAndDelete({ _id });
     return res.status(200).send(user);

@@ -12,6 +12,7 @@ exports.assignRoutes = app => {
   app.post('/api/login', AuthAPI.login);
   app.post('/api/forgot-password', AuthAPI.forgotPassword);
   app.post('/api/reset-password', AuthAPI.resetPassword);
+  app.get('/api/current-user', passport.authenticate('jwt', { session: false }), AuthAPI.getCurrentUser);
 
   // MEMO: seed API
   app.get('/api/seed/:password', SeedAPI.initSeed);
