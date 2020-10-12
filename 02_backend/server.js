@@ -15,6 +15,7 @@ const app = express();
 app.use(passport.initialize());
 require('~/passport')(passport);
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
 app.use(compression());
