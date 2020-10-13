@@ -130,14 +130,17 @@ const UserInfoPanel = ({ user }) => {
           onChange={inputChangeHandler}
           className={classes.input}
         />
-        <CustomSelect
-          name='professions'
-          label='Professions'
-          value={inputs.professions || ''}
-          lists={commonConstants.PROFESSION_LIST}
-          onChange={inputChangeHandler}
-          className={classes.input}
-        />
+        {
+          user.role === commonConstants.ROLE.AGENT &&
+          <CustomSelect
+            name='professions'
+            label='Professions'
+            value={inputs.professions || ''}
+            lists={commonConstants.PROFESSION_LIST}
+            onChange={inputChangeHandler}
+            className={classes.input}
+          />
+        }
         <OutlinedTextField
           disabled
           validators={[formValidatorsConstants.REQUIRED.VALIDATOR, formValidatorsConstants.EMAIL.VALIDATOR]}
