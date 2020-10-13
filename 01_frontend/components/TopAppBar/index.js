@@ -1,16 +1,14 @@
 
 import { memo } from 'react';
+import { useSelector } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
-import { useQuery } from 'react-query';
 
-import * as AUTH_SERVICE from 'services/auth';
 import Logo from 'components/Logo';
 import Avatar from 'components/TopAppBar/Avatar';
 import CustomLink from 'components/UI/Buttons/CustomLink';
 import PAGES from 'constants/links/pages';
-import { isEmpty } from 'utils/utility';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -39,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 const TopAppBar = () => {
   const classes = useStyles();
-  const { data: { data : user = {} } = {} } = useQuery(['currentUser'], AUTH_SERVICE.getCurrentUser);
+  const { isAuthenticated = false } = useSelector(state => state.auth, {});
 
   return (
     <AppBar
@@ -50,8 +48,8 @@ const TopAppBar = () => {
           <Logo className={classes.logo} width={70} height={70} />
         </CustomLink>
         {
-          !isEmpty(user) &&
-          <Avatar user={user} />
+          isAuthenticated &&
+          <Avatar />
         }
       </Toolbar>
     </AppBar>

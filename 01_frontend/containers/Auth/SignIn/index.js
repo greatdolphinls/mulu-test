@@ -1,9 +1,11 @@
 
 import { useState, memo } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 
 import * as AUTH_SERVICE from 'services/auth';
+import { setUserToken } from 'actions/auth';
 import LoadingOverlay from 'components/LoadingOverlay';
 import ValidatorFormWrapper from 'components/UI/ValidatorFormWrapper';
 import OutlinedTextField from 'components/UI/TextFields/OutlinedTextField'
@@ -14,12 +16,12 @@ import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
 import PAGES from 'constants/links/pages';
 import formValidatorsConstants from 'constants/formValidators';
 import { notifyError } from 'utils/notification';
-import { useForm, useAuth } from 'utils/hooks';
+import { useForm } from 'utils/hooks';
 
 const SignIn = () => {
   const classes = authPageStyles();
   const router = useRouter();
-  const { setLoginToken } = useAuth();
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -34,9 +36,9 @@ const SignIn = () => {
       }
 
       const { data: { token, user } } = await AUTH_SERVICE.login(data);
-      setLoginToken(token)
+      await dispatch(setUserToken(token, user));
       setLoading(false)
-      router.push(PAGES.HOME.url)
+      router.push(PAGES.HOME.url);
     } catch (error) {
       setLoading(false)
       if (error.response) {

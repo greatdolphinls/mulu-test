@@ -57,7 +57,6 @@ const AvatarItem = ({ user }) => {
       <AvatarDownMenu 
         anchorEl={anchorEl} 
         onClose={handleClose} 
-        user={user}  
       />
     </>
   );

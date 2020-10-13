@@ -2,11 +2,12 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import 'typeface-roboto';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 
-import setAuthToken from 'services/security/setAuthToken'
+import store, { persistor } from 'store';
 import theme from 'styles/theme';
 import Layout from 'hoc/Layout';
 import Notification from 'components/Notification';
@@ -23,10 +24,6 @@ const MyApp = ({ Component, pageProps }) => {
     document.title = commonConstants.TITLE;
   }, []);
 
-  useEffect(() => {
-    setAuthToken(token)
-  }, [token])
-  
   useEffect(() => {
     if (!!token) {
       if (authRoutes.includes(router.pathname)) {
@@ -52,9 +49,13 @@ const MyApp = ({ Component, pageProps }) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Notification />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </PersistGate>
+        </Provider>
       </ThemeProvider>
     </>
   );

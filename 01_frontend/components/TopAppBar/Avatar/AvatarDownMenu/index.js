@@ -1,6 +1,7 @@
 
 import React, { memo } from 'react';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -8,9 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import HomeIcon from '@material-ui/icons/Home';
 import SignOutIcon from '@material-ui/icons/ExitToAppRounded';
 
+import { logoutUser } from 'actions/auth';
 import CustomDivider from 'components/UI/CustomDivider';
 import PAGES from 'constants/links/pages';
-import { useAuth } from 'utils/hooks';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -28,10 +29,6 @@ const useStyles = makeStyles(theme => ({
       transform: 'translateY(-3px)',
       transition: 'ease-out 0.4s',
     }
-  },
-  userName: {
-    fontWeight: 'bold',
-    textTransform: 'uppercase'
   },
   title: {
     paddingLeft: theme.spacing(2.5)
@@ -63,14 +60,15 @@ const socialItems = [
   }
 ];
 
-const AvatarDownMenu = ({ anchorEl, onClose, user }) => {
+const AvatarDownMenu = ({ anchorEl, onClose }) => {
   const classes = useStyles();
   const router = useRouter();
-  const { logOutHandler } = useAuth();
+  const dispatch = useDispatch();
 
   const menuHandler = (link) => () => {
     if (link === PAGES.SIGN_OUT.url){
-      logOutHandler();
+      dispatch(logoutUser());
+      return;
     }
 
     router.push(link);
@@ -96,14 +94,6 @@ const AvatarDownMenu = ({ anchorEl, onClose, user }) => {
         horizontal: 'right',
       }}
     >
-      <MenuItem
-        key='userName'
-        className={classes.menuItem}
-      >
-        <Typography variant='body2' className={classes.userName}>
-          {user?.firstName || ''}
-        </Typography>
-      </MenuItem>
       {
         menuItems.map(item =>
           <MenuItem

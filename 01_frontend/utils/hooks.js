@@ -1,6 +1,8 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useQuery } from 'react-query';
 
+import * as AUTH_SERVICE from 'services/auth';
 import setAuthToken from 'services/security/setAuthToken'
 
 const useForm = callback => {
@@ -33,24 +35,6 @@ const useForm = callback => {
   };
 };
 
-const useAuth = () => {
-  const logOutHandler = useCallback(() => {
-    localStorage.clear();
-    setAuthToken('');
-  }, []);
-
-  const setLoginToken = useCallback((token) => {
-    setAuthToken(token);
-    localStorage.setItem('token', token);
-  }, []);
-
-  return {
-    logOutHandler,
-    setLoginToken
-  }
-};
-
 export {
-  useForm,
-  useAuth
+  useForm
 };
