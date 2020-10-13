@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
+import PersonIcon from '@material-ui/icons/PersonOutline';
 import HomeIcon from '@material-ui/icons/Home';
 import SignOutIcon from '@material-ui/icons/ExitToAppRounded';
 
@@ -49,6 +50,11 @@ const menuItems = [
     title: PAGES.HOME.title,
     icon: <HomeIcon />,
     link: PAGES.HOME.url
+  },
+  {
+    title: PAGES.AGENT_CONTACT.title,
+    icon: <PersonIcon />,
+    link: PAGES.AGENT_CONTACT.url
   }
 ];
 

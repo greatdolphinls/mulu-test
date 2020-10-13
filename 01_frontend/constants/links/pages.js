@@ -23,6 +23,10 @@ const PAGES = {
   HOME: {
     title: 'Home',
     url: '/',
+  },
+  AGENT_CONTACT: {
+    title: 'Agent Contact',
+    url: '/agent-contact',
   }
 };
 

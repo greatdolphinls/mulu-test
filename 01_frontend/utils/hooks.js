@@ -1,9 +1,5 @@
 
-import { useState, useCallback, useEffect } from 'react';
-import { useQuery } from 'react-query';
-
-import * as AUTH_SERVICE from 'services/auth';
-import setAuthToken from 'services/security/setAuthToken'
+import { useState } from 'react';
 
 const useForm = callback => {
   const [inputs, setInputs] = useState({});

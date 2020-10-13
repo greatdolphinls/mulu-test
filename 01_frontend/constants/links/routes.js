@@ -8,7 +8,8 @@ const authRoutes = [
 ];
 
 const pageRoutes = [
-  PAGES.HOME.url
+  PAGES.HOME.url,
+  PAGES.AGENT_CONTACT.url
 ];
 
 const commonRoutes = [ ]
