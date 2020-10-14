@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CustomDivider from 'components/UI/CustomDivider'
 import UserInfoPanel from './UserInfoPanel';
 import UserPasswordPanel from './UserPasswordPanel';
+import { isEmpty } from 'utils/utility';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,9 +33,14 @@ const Home = () => {
   return (
     <main className={classes.root}>
       <div className={classes.container}>
-        <UserInfoPanel user={user} />
-        <CustomDivider />
-        <UserPasswordPanel user={user} />
+        {
+          !isEmpty(user) &&
+          <>
+            <UserInfoPanel user={user} />
+            <CustomDivider />
+            <UserPasswordPanel user={user} />
+          </>
+        }
       </div>
     </main>
   )
